@@ -21,7 +21,7 @@
 }
 html{font-size:14.5px;scroll-behavior:smooth}
 body{font-family:'Outfit',sans-serif;background:var(--white);color:var(--text);line-height:1.6;display:flex;min-height:100vh}
- 
+
 .sidebar{
   width:var(--sidebar-w);min-width:var(--sidebar-w);
   height:100vh;position:sticky;top:0;
@@ -72,9 +72,9 @@ body{font-family:'Outfit',sans-serif;background:var(--white);color:var(--text);l
   min-width:20px;text-align:right;
 }
 .nav-item.active .nav-badge{color:var(--green)}
- 
+
 .main-area{flex:1;display:flex;flex-direction:column;min-width:0}
- 
+
 .topbar{
   position:sticky;top:0;z-index:10;
   background:rgba(255,255,255,0.95);backdrop-filter:blur(16px);
@@ -123,9 +123,9 @@ body{font-family:'Outfit',sans-serif;background:var(--white);color:var(--text);l
   margin-left:auto;
 }
 .result-count b{color:var(--text-sec);font-weight:600}
- 
+
 .content{flex:1;padding:1.2rem 2rem 4rem;overflow-y:auto}
- 
+
 .badge{
   display:inline-block;padding:2px 8px;
   font-size:0.6rem;font-weight:600;text-transform:uppercase;
@@ -134,7 +134,7 @@ body{font-family:'Outfit',sans-serif;background:var(--white);color:var(--text);l
 .badge-construct{background:var(--green-pale);color:var(--green)}
 .badge-theory{background:var(--plum-pale);color:var(--plum)}
 .badge-paper{background:var(--slate-pale);color:var(--slate)}
- 
+
 .card-list{display:flex;flex-direction:column;gap:1px;background:var(--border-faint);border:1px solid var(--border-faint);border-radius:8px;overflow:hidden}
 .card{background:var(--white);padding:1rem 1.4rem;cursor:pointer;transition:background 0.12s;position:relative}
 .card:hover{background:var(--off-white)}
@@ -158,7 +158,7 @@ body{font-family:'Outfit',sans-serif;background:var(--white);color:var(--text);l
   color:var(--text-dim);transition:transform 0.2s;margin-top:2px;
 }
 .card.open .card-chevron{transform:rotate(180deg);color:var(--green)}
- 
+
 .card-expand{
   display:none;margin-top:0.8rem;
   padding-top:0.8rem;border-top:1px solid var(--border-faint);
@@ -184,7 +184,7 @@ mark{background:rgba(43,110,78,0.15);color:inherit;padding:0 2px;border-radius:2
 .empty{text-align:center;padding:5rem 2rem;color:var(--text-dim)}
 .empty-icon{font-size:2.2rem;margin-bottom:0.8rem;opacity:0.35}
 .empty p{font-size:0.88rem}
- 
+
 /* Loading */
 .loading-overlay{
   display:flex;flex-direction:column;align-items:center;justify-content:center;
@@ -198,7 +198,7 @@ mark{background:rgba(43,110,78,0.15);color:inherit;padding:0 2px;border-radius:2
 @keyframes spin{to{transform:rotate(360deg)}}
 .loading-text{font-size:0.85rem}
 .load-error{color:#b44;font-size:0.85rem;text-align:center;padding:3rem 2rem;line-height:1.7}
- 
+
 /* Sync indicator */
 .sync-info{
   padding:0.6rem 1.2rem;border-top:1px solid var(--border);
@@ -206,7 +206,7 @@ mark{background:rgba(43,110,78,0.15);color:inherit;padding:0 2px;border-radius:2
   display:flex;align-items:center;gap:6px;
 }
 .sync-dot{width:6px;height:6px;border-radius:50%;background:#6bc47f}
- 
+
 .mobile-toggle{
   display:none;position:fixed;bottom:1.2rem;left:1.2rem;z-index:30;
   width:44px;height:44px;border-radius:50%;
@@ -232,12 +232,12 @@ mark{background:rgba(43,110,78,0.15);color:inherit;padding:0 2px;border-radius:2
 </style>
 </head>
 <body>
- 
+
 <div class="overlay" id="overlay" onclick="closeSidebar()"></div>
 <button class="mobile-toggle" id="mobileToggle" onclick="toggleSidebar()">
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
 </button>
- 
+
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-header">
     <div class="sidebar-logo">Paper Archive<span class="mark"></span></div>
@@ -251,7 +251,7 @@ mark{background:rgba(43,110,78,0.15);color:inherit;padding:0 2px;border-radius:2
     <span>Synced with Google Sheets</span>
   </div>
 </aside>
- 
+
 <div class="main-area">
   <div class="topbar">
     <div class="search-box">
@@ -272,13 +272,13 @@ mark{background:rgba(43,110,78,0.15);color:inherit;padding:0 2px;border-radius:2
     </div>
   </div>
 </div>
- 
+
 <script>
 // ============================================================
 //  CONFIGURATION — edit these values for your setup
 // ============================================================
 const SPREADSHEET_ID = '1myqegJEimdmMzJae_aXKXvJh-n5F-m_iIbdxJusWJZA';
- 
+
 // Sheet definitions: name and type (construct | theory | paper)
 const SHEET_CONFIG = [
   { name: 'Constructs',           type: 'construct' },
@@ -307,17 +307,17 @@ const SHEET_CONFIG = [
   { name: 'Job Design',           type: 'paper' },
 ];
 // ============================================================
- 
+
 const DATA = {};
 let activeTab = 'All';
 let query = '';
 let allExpanded = false;
- 
+
 // ── FETCH DATA FROM GOOGLE SHEETS ──
 function sheetCsvUrl(sheetName) {
   return `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(sheetName)}`;
 }
- 
+
 function parseConstructs(rows) {
   // Headers: Construct, Definition, Reference, Scale
   return rows.slice(1).filter(r => r[0] && r[0].trim()).map(r => ({
@@ -327,7 +327,7 @@ function parseConstructs(rows) {
     s: (r[3]||'').trim()
   }));
 }
- 
+
 function parseTheories(rows) {
   // Headers: Theory, Explanation, Example reference paper, Others
   return rows.slice(1).filter(r => r[0] && r[0].trim()).map(r => ({
@@ -337,7 +337,7 @@ function parseTheories(rows) {
     extra: (r[3]||'').trim()
   }));
 }
- 
+
 function parsePapers(rows) {
   // Headers: Reference, Summary, Keywords
   // Keywords on subsequent rows with empty Reference merge into parent
@@ -357,7 +357,7 @@ function parsePapers(rows) {
   if (current) entries.push(current);
   return entries;
 }
- 
+
 async function fetchSheet(config) {
   const url = sheetCsvUrl(config.name);
   try {
@@ -375,20 +375,20 @@ async function fetchSheet(config) {
     return [];
   }
 }
- 
+
 async function loadAllData() {
   const promises = SHEET_CONFIG.map(async cfg => {
     DATA[cfg.name] = await fetchSheet(cfg);
   });
   await Promise.all(promises);
 }
- 
+
 // ── RENDER LOGIC (same as before) ──
 function sheetType(name) {
   const cfg = SHEET_CONFIG.find(c => c.name === name);
   return cfg ? cfg.type : 'paper';
 }
- 
+
 function allEntries() {
   const out = [];
   for (const [sheet, items] of Object.entries(DATA)) {
@@ -397,14 +397,14 @@ function allEntries() {
   }
   return out;
 }
- 
+
 function matches(item, q) {
   if (!q) return true;
   const terms = q.toLowerCase().split(/\s+/);
   const hay = [item.n||'', item.d||'', item.r||'', item.s||'', item.summary||'', item.keywords||'', item.extra||''].join(' ').toLowerCase();
   return terms.every(t => hay.includes(t));
 }
- 
+
 function hl(text, q) {
   if (!q || !text) return text || '';
   const terms = q.toLowerCase().split(/\s+/).filter(t => t.length > 1);
@@ -412,17 +412,17 @@ function hl(text, q) {
   const esc = terms.map(t => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
   return text.replace(new RegExp('(' + esc.join('|') + ')', 'gi'), '<mark>$1</mark>');
 }
- 
+
 function buildNav() {
   const nav = document.getElementById('sidebarNav');
   const sheets = Object.entries(DATA);
   const total = sheets.reduce((s, [, i]) => s + i.length, 0);
   document.getElementById('totalCount').textContent = total + ' entries across ' + sheets.length + ' categories';
- 
+
   let h = '';
   h += `<button class="nav-item ${activeTab==='All'?'active':''}" onclick="setTab('All')">
     <span>All</span><span class="nav-badge">${total}</span></button>`;
- 
+
   const special = ['Constructs', 'Theories'];
   h += '<div class="nav-section">Collections</div>';
   special.forEach(name => {
@@ -430,7 +430,7 @@ function buildNav() {
     h += `<button class="nav-item ${activeTab===name?'active':''}" onclick="setTab('${escQ(name)}')">
       <span>${name}</span><span class="nav-badge">${DATA[name].length}</span></button>`;
   });
- 
+
   h += '<div class="nav-section">Research Topics</div>';
   sheets.filter(([n]) => !special.includes(n)).sort((a, b) => a[0].localeCompare(b[0], undefined, {sensitivity: 'base'})).forEach(([name, items]) => {
     h += `<button class="nav-item ${activeTab===name?'active':''}" onclick="setTab('${escQ(name)}')">
@@ -438,41 +438,41 @@ function buildNav() {
   });
   nav.innerHTML = h;
 }
- 
+
 function escQ(s) { return s.replace(/'/g, "\\'"); }
- 
+
 function getTitle(item) {
   if (item._type === 'construct' || item._type === 'theory') return item.n || 'Untitled';
   const r = item.r || '';
   const m = r.match(/^(.+?\(\d{4}\))/);
   return m ? m[1] : r.substring(0, 120) || (item.summary ? item.summary.substring(0, 80) : 'Untitled');
 }
- 
+
 function getPreview(item) {
   if (item._type === 'construct' || item._type === 'theory') return item.d || '';
   return item.summary || '';
 }
- 
+
 function renderCards() {
   const el = document.getElementById('content');
   let entries = activeTab === 'All' ? allEntries() : (DATA[activeTab] || []).map(it => ({...it, _sheet: activeTab, _type: sheetType(activeTab)}));
   const filtered = entries.filter(it => matches(it, query));
- 
+
   document.getElementById('resultCount').innerHTML = query
     ? '<b>' + filtered.length + '</b> / ' + entries.length
     : '<b>' + filtered.length + '</b> entries';
- 
+
   if (!filtered.length) {
     el.innerHTML = '<div class="empty"><div class="empty-icon">&#128269;</div><p>' + (query ? 'No results for "' + query + '"' : 'No entries in this category') + '</p></div>';
     return;
   }
- 
+
   filtered.sort((a, b) => {
     const an = a.n || a.r || '';
     const bn = b.n || b.r || '';
     return an.localeCompare(bn, undefined, {sensitivity: 'base'});
   });
- 
+
   let h = '<div class="card-list">';
   filtered.forEach((item, i) => {
     const bc = item._type === 'construct' ? 'badge-construct' : item._type === 'theory' ? 'badge-theory' : 'badge-paper';
@@ -480,7 +480,7 @@ function renderCards() {
     const title = hl(getTitle(item), query);
     const preview = hl(getPreview(item), query);
     const showBadge = activeTab === 'All';
- 
+
     h += `<div class="card" id="c${i}" onclick="toggle(${i})">
       <div class="card-top">
         <div class="card-body">
@@ -491,7 +491,7 @@ function renderCards() {
         <div class="card-chevron"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M6 9l6 6 6-6"/></svg></div>
       </div>
       <div class="card-expand">`;
- 
+
     if (item._type === 'construct') {
       if (item.d) h += field('Definition', hl(item.d, query));
       if (item.r) h += field('Reference', hl(item.r, query));
@@ -515,16 +515,16 @@ function renderCards() {
   allExpanded = false;
   updateToggleBtn();
 }
- 
+
 function field(label, text) {
   return '<div class="field"><div class="field-label">' + label + '</div><div class="field-text">' + text + '</div></div>';
 }
- 
+
 function toggle(i) {
   document.getElementById('c' + i).classList.toggle('open');
   updateToggleBtn();
 }
- 
+
 function toggleAll() {
   const cards = document.querySelectorAll('.card');
   allExpanded = !allExpanded;
@@ -534,7 +534,7 @@ function toggleAll() {
   });
   updateToggleBtn();
 }
- 
+
 function updateToggleBtn() {
   const cards = document.querySelectorAll('.card');
   const openCount = [...cards].filter(c => c.classList.contains('open')).length;
@@ -549,7 +549,7 @@ function updateToggleBtn() {
     label.textContent = 'Expand All';
   }
 }
- 
+
 function setTab(name) {
   activeTab = name;
   buildNav();
@@ -557,7 +557,7 @@ function setTab(name) {
   document.getElementById('content').scrollTo(0, 0);
   closeSidebar();
 }
- 
+
 // Search
 let timer;
 document.getElementById('searchInput').addEventListener('input', function(e) {
@@ -572,7 +572,7 @@ document.addEventListener('keydown', function(e) {
   if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); document.getElementById('searchInput').focus(); }
   if (e.key === 'Escape') document.getElementById('searchInput').blur();
 });
- 
+
 // Mobile sidebar
 function toggleSidebar() {
   document.getElementById('sidebar').classList.toggle('open');
@@ -582,7 +582,7 @@ function closeSidebar() {
   document.getElementById('sidebar').classList.remove('open');
   document.getElementById('overlay').classList.remove('show');
 }
- 
+
 // ── INIT ──
 (async function init() {
   try {
@@ -601,4 +601,3 @@ function closeSidebar() {
 </script>
 </body>
 </html>
- 
